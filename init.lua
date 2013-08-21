@@ -158,6 +158,18 @@ minetest.register_node( "diamonds:garden", {
 	sounds = default.node_sound_stone_defaults(),
 })
 
+minetest.register_abm({
+	nodenames = {"diamonds:garden"},
+	interval = 10,
+	chance = 1,
+	action = function(pos)
+		local p = {x=pos.x, y=pos.y-1, z=pos.z}
+		if minetest.env:get_node(p).name ~= "diamonds:garden_block" then
+			minetest.remove_node(p)
+		end
+	end
+})
+
 
 --
 --Crafting
