@@ -149,7 +149,7 @@ minetest.register_node( "diamonds:garden_block", {
 minetest.register_node( "diamonds:garden", {
 	drawtype = "plantlike",
 	description = "Diamond Showcase",
-	tile_images = { "diamond_showcase.png" },
+	tile_images = {"diamond_showcase.png^diamonds_diamond.png"},
 	is_ground_content = true,
 	paramtype = "light",
 	visual_scale = 1.0,
