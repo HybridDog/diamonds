@@ -165,7 +165,7 @@ minetest.register_abm({
 	action = function(pos)
 		local p = {x=pos.x, y=pos.y-1, z=pos.z}
 		if minetest.env:get_node(p).name ~= "diamonds:garden_block" then
-			minetest.remove_node(p)
+			minetest.remove_node(pos)
 		end
 	end
 })
