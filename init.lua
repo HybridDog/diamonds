@@ -7,83 +7,38 @@
 --Please give any ideas on ways to improve this mod!                                  +
 --+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-minetest.register_node( "diamonds:diamond_in_ground", {
-	description = "Diamond Ore",
-	tile_images = { "default_stone.png^diamond_in_ground.png" },
-	is_ground_content = true,
-	groups = {cracky=3},
-	sounds = default.node_sound_stone_defaults(),
-	drop = 'craft "diamonds:diamond" 1',
-})
-
-minetest.register_node( "diamonds:block", {
-	description = "Diamond Block",
-	tile_images = { "diamond_block.png" },
-	is_ground_content = true,
-	groups = {cracky=3},
-	sounds = default.node_sound_stone_defaults(),
-})
-
-minetest.register_craftitem( "diamonds:diamond", {
-	description = "Diamond",
-	inventory_image = "diamonds_diamond.png",
-	on_place_on_ground = minetest.craftitem_place_item,
-})
 
 --
---Tools
+--Change default textures
 --
 
-minetest.register_tool("diamonds:sword", {
-	description = "Diamond Sword",
-	inventory_image = "diamond_sword.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=1,
-		groupcaps={
-			fleshy={times={[1]=2.00, [2]=0.80, [3]=0.40}, uses=500, maxlevel=2},
-			snappy={times={[2]=0.70, [3]=0.30}, uses=450, maxlevel=1},
-			choppy={times={[3]=0.70}, uses=400, maxlevel=0}
-		}
-	}
-})
+local function change_textures(node, imgs, typ)
+	local tmp = minetest.registered_items[node]
+	if typ == 0 then
+		tmp.tiles = imgs
+		minetest.register_node(":"..node, tmp)
+	elseif typ == 1 then
+		tmp.inventory_image = imgs[1]
+		minetest.register_item(":"..node, tmp)
+	else
+		tmp.inventory_image = imgs[1]
+		minetest.register_tool(":"..node, tmp)
+	end
+end
 
-minetest.register_tool("diamonds:axe", {
-	description = "Diamond Axe",
-	inventory_image = "diamond_axe.png",
-	tool_capabilities = {
-		max_drop_level=1,
-		groupcaps={
-			choppy={times={[1]=3.00, [2]=1.60, [3]=1.00}, uses=500, maxlevel=2},
-			fleshy={times={[2]=1.10, [3]=0.60}, uses=600, maxlevel=1}
-		}
-	},
-})
+local diamond_list = {
+	{"stone_with_diamond", {"default_stone.png^diamond_in_ground.png"}, 0},
+	{"diamondblock", {"diamond_block.png"}, 0},
+	{"diamond", {"diamonds_diamond.png"}, 1},
+	{"pick_diamond", {"diamond_pick.png"}, 2},
+	{"axe_diamond", {"diamond_axe.png"}, 2},
+	{"shovel_diamond", {"diamond_shovel.png"}, 2},
+	{"sword_diamond", {"diamond_sword.png"}, 2},
+}
 
-minetest.register_tool("diamonds:shovel", {
-	description = "Diamond Shovel",
-	inventory_image = "diamond_shovel.png",
-	tool_capabilities = {
-		max_drop_level=1,
-		groupcaps={
-			crumbly={times={[1]=1.50, [2]=0.70, [3]=0.60}, uses=500, maxlevel=2}
-		}
-	},
-})
-
-minetest.register_tool("diamonds:pick", {
-	description = "Diamond Pickaxe",
-	inventory_image = "diamond_pick.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=3,
-		groupcaps={
-			cracky={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=500, maxlevel=3},
-			crumbly={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=600, maxlevel=3},
-			snappy={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=550, maxlevel=3}
-		}
-	},
-})
+for _,i in ipairs(diamond_list) do
+	change_textures("default:"..i[1], i[2], i[3])
+end
 
 
 --
@@ -105,6 +60,7 @@ minetest.register_node( "diamonds:steelblock", {
 	sounds = default.node_sound_stone_defaults(),
 })
 
+
 --
 --Diamond and Steel Tools
 --
@@ -113,25 +69,26 @@ minetest.register_tool("diamonds:steelsword", {
 	description = "Diamond and Steel Sword",
 	inventory_image = "diamond_steel_sword.png",
 	tool_capabilities = {
-		full_punch_interval = 1.0,
+		full_punch_interval = 0.6,
 		max_drop_level=1,
 		groupcaps={
-			fleshy={times={[1]=2.00, [2]=0.80, [3]=0.40}, uses=700, maxlevel=2},
-			snappy={times={[2]=0.70, [3]=0.30}, uses=650, maxlevel=1},
-			choppy={times={[3]=0.70}, uses=600, maxlevel=0}
-		}
-	}
+			snappy={times={[1]=1.9, [2]=0.7, [3]=0.15}, uses=650, maxlevel=1},
+			choppy={times={[3]=0.7}, uses=500, maxlevel=0}
+		},
+		damage_groups = {fleshy=8},
+	},
 })
 
 minetest.register_tool("diamonds:steelaxe", {
 	description = "Diamond and Steel Axe",
 	inventory_image = "diamond_steel_axe.png",
 	tool_capabilities = {
+		full_punch_interval = 0.9,
 		max_drop_level=1,
 		groupcaps={
-			choppy={times={[1]=3.00, [2]=1.60, [3]=1.00}, uses=700, maxlevel=2},
-			fleshy={times={[2]=1.10, [3]=0.60}, uses=800, maxlevel=1}
-		}
+			choppy={times={[1]=2, [2]=0.7, [3]=0.4}, uses=700, maxlevel=2},
+		},
+		damage_groups = {fleshy=7},
 	},
 })
 
@@ -139,9 +96,10 @@ minetest.register_tool("diamonds:steelshovel", {
 	description = "Diamond and Steel Shovel",
 	inventory_image = "diamond_steel_shovel.png",
 	tool_capabilities = {
+		full_punch_interval = 0.9,
 		max_drop_level=1,
 		groupcaps={
-			crumbly={times={[1]=1.50, [2]=0.70, [3]=0.60}, uses=700, maxlevel=2}
+			crumbly={times={[1]=0.9, [2]=0.4, [3]=0.2}, uses=700, maxlevel=3}
 		}
 	},
 })
@@ -150,15 +108,16 @@ minetest.register_tool("diamonds:steelpick", {
 	description = "Diamond and Steel Pickaxe",
 	inventory_image = "diamond_steel_pick.png",
 	tool_capabilities = {
-		full_punch_interval = 1.0,
+		full_punch_interval = 0.7,
 		max_drop_level=3,
 		groupcaps={
-			cracky={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=700, maxlevel=3},
-			crumbly={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=800, maxlevel=3},
-			snappy={times={[1]=2.0, [2]=1.0, [3]=0.5}, uses=750, maxlevel=3}
-		}
+			cracky={times={[1]=1.5, [2]=0.7, [3]=0.3}, uses=700, maxlevel=3},
+			crumbly={times={[1]=1, [2]=0.8, [3]=0.5}, uses=800, maxlevel=3},
+		},
+		damage_groups = {fleshy=4},
 	},
 })
+
 
 --
 --Diamond Showcase
@@ -173,6 +132,14 @@ minetest.register_node( "diamonds:garden_block", {
 	is_ground_content = true,
 	groups = {cracky=3},
 	sounds = default.node_sound_stone_defaults(),
+	on_construct = function(pos)
+		local p = {x=pos.x, y=pos.y+1, z=pos.z}
+		minetest.add_node(p, {name="diamonds:garden"})
+	end,
+	after_dig_node = function(pos)
+		local p = {x=pos.x, y=pos.y+1, z=pos.z}
+		minetest.remove_node(p)
+	end
 })
 
 minetest.register_node( "diamonds:garden", {
@@ -187,93 +154,17 @@ minetest.register_node( "diamonds:garden", {
 	sounds = default.node_sound_stone_defaults(),
 })
 
-function add_garden(pos, node, active_object_count, active_object_count_wider)
-	if 
-	  node.name == "diamonds:garden_block"
-	then
-	  pos.y = pos.y + 1
-	  minetest.env:add_node(pos, {name="diamonds:garden"})
-  end
-end
-minetest.register_on_placenode(add_garden)
-
-function remove_garden(pos, node, active_object_count, active_object_count_wider)
-	if 
-	  node.name == "diamonds:garden_block"
-	then
-	  pos.y = pos.y + 1
-	  minetest.env:remove_node(pos, {name="diamonds:garden"})
-  end
-end
-minetest.register_on_dignode(remove_garden)
-
-
-
-
-
 
 --
 --Crafting
 --
 
 minetest.register_craft({
-	output = 'diamonds:pick',
-	recipe = {
-		{'diamonds:diamond', 'diamonds:diamond', 'diamonds:diamond'},
-		{'', 'default:stick', ''},
-		{'', 'default:stick', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:axe',
-	recipe = {
-		{'diamonds:diamond', 'diamonds:diamond', ''},
-		{'diamonds:diamond', 'default:stick', ''},
-		{'', 'default:stick', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:shovel',
-	recipe = {
-		{'', 'diamonds:diamond', ''},
-		{'', 'default:stick', ''},
-		{'', 'default:stick', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:sword',
-	recipe = {
-		{'', 'diamonds:diamond', ''},
-		{'', 'diamonds:diamond', ''},
-		{'', 'default:stick', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:block',
-	recipe = {
-		{'diamonds:diamond', 'diamonds:diamond', 'diamonds:diamond'},
-		{'diamonds:diamond', 'diamonds:diamond', 'diamonds:diamond'},
-		{'diamonds:diamond', 'diamonds:diamond', 'diamonds:diamond'},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:diamond 9',
-	recipe = {
-		{'', 'diamonds:block', ''},
-	}
-})
-
-minetest.register_craft({
 	output = 'diamonds:ingot 2',
 	recipe = {
-		{'diamonds:diamond'},
+		{'default:diamond'},
 		{'default:steel_ingot'},
-		{'diamonds:diamond'},
+		{'default:diamond'},
 	}
 })
 
@@ -325,9 +216,16 @@ minetest.register_craft({
 minetest.register_craft({
 	output = 'diamonds:garden_block',
 	recipe = {
-		{'', 'diamonds:diamond', ''},
-		{'diamonds:diamond', 'diamonds:block', 'diamonds:diamond'},
-		{'', 'diamonds:diamond', ''},
+		{'', 'default:diamond', ''},
+		{'default:diamond', 'default:diamondblock', 'default:diamond'},
+		{'', 'default:diamond', ''},
+	}
+})
+
+minetest.register_craft({
+	output = 'default:diamond 13',
+	recipe = {
+		{'diamonds:garden_block'},
 	}
 })
 
@@ -340,6 +238,6 @@ minetest.register_craft({
 
 
 --generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, ore_per_chunk, height_min, height_max)
---generate_ore("diamonds:diamond_in_ground", "default:stone", minp, maxp, seed+20,   1/13/13/13,    2, -31000,  -300)
+--generate_ore("ddiamond_in_ground", "default:stone", minp, maxp, seed+20,   1/13/13/13,    2, -31000,  -300)
 
 print("Diamonds mod loaded!")
