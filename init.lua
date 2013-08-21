@@ -134,11 +134,15 @@ minetest.register_node( "diamonds:garden_block", {
 	sounds = default.node_sound_stone_defaults(),
 	on_construct = function(pos)
 		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		minetest.add_node(p, {name="diamonds:garden"})
+		if minetest.env:get_node(p).name == "air" then
+			minetest.add_node(p, {name="diamonds:garden"})
+		end
 	end,
 	after_dig_node = function(pos)
 		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		minetest.remove_node(p)
+		if minetest.env:get_node(p).name == "diamonds:garden" then
+			minetest.remove_node(p)
+		end
 	end
 })
 
