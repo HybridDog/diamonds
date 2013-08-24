@@ -149,13 +149,11 @@ minetest.register_node( "diamonds:garden_block", {
 minetest.register_node( "diamonds:garden", {
 	drawtype = "plantlike",
 	description = "Diamond Showcase",
-	tile_images = {"diamond_showcase.png^diamonds_diamond.png"},
-	is_ground_content = true,
+	tiles = {"diamond_showcase.png^diamonds_diamond.png"},
 	paramtype = "light",
-	visual_scale = 1.0,
+	drop = "",
 	pointable = false,
 	groups = {immortal=1,not_in_creative_inventory=1},
-	sounds = default.node_sound_stone_defaults(),
 })
 
 minetest.register_abm({
