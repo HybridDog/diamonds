@@ -1,11 +1,23 @@
+local t1 = os.clock()
 
---+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
---Diamonds by InfinityProject                                                         +
---                                                                                    +
---LICENSE: WTFPL DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE; applies to all parts.   +
---                                                                                    +
---Please give any ideas on ways to improve this mod!                                  +
---+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+--
+--Aliases for the old diamonds mod
+--
+
+local diamond_alias_list = {
+	{"diamond_in_ground", "stone_with_diamond"},
+	{"block", "diamondblock"},
+	{"diamond", "diamond"},
+	{"pick", "pick_diamond"},
+	{"axe", "axe_diamond"},
+	{"shovel", "shovel_diamond"},
+	{"sword", "sword_diamond"},
+}
+
+for _,i in ipairs(diamond_alias_list) do
+	minetest.register_alias("diamonds:"..i[1], "default:"..i[2])
+end
 
 
 --
@@ -123,7 +135,7 @@ minetest.register_tool("diamonds:steelpick", {
 --Diamond Showcase
 --
 --This is still registered as diamonds:garden. I will change it and probably add an abm to replace
---all old blocks soon.
+--all old blocks soon?
 -- 
 
 minetest.register_node( "diamonds:garden_block", {
@@ -254,4 +266,4 @@ minetest.register_craft({
 --generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, ore_per_chunk, height_min, height_max)
 --generate_ore("ddiamond_in_ground", "default:stone", minp, maxp, seed+20,   1/13/13/13,    2, -31000,  -300)
 
-print("Diamonds mod loaded!")
+print(string.format("[diamonds] loaded after ca. %.2fs", os.clock() - t1))
