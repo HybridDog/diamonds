@@ -67,7 +67,6 @@ minetest.register_craftitem( "diamonds:ingot", {
 minetest.register_node( "diamonds:steelblock", {
 	description = "Diamond and Steel Block",
 	tile_images = { "diamond_steel_block.png" },
-	is_ground_content = true,
 	groups = {cracky=3},
 	sounds = default.node_sound_stone_defaults(),
 })
@@ -150,7 +149,7 @@ minetest.register_node( "diamonds:garden_block", {
 			minetest.add_node(p, {name="diamonds:garden"})
 		end
 	end,
-	after_dig_node = function(pos)
+	after_destruct = function(pos)
 		local p = {x=pos.x, y=pos.y+1, z=pos.z}
 		if minetest.env:get_node(p).name == "diamonds:garden" then
 			minetest.remove_node(p)
@@ -185,80 +184,88 @@ minetest.register_abm({
 --Crafting
 --
 
+if technic
+and technic.register_alloy_recipe then
+	technic.register_alloy_recipe({
+		input = {"default:diamond 2", "default:steel_ingot"},
+		output = "diamonds:ingot 2",
+	})
+else
+	minetest.register_craft({
+		output = "diamonds:ingot 2",
+		recipe = {
+			{"default:diamond"},
+			{"default:steel_ingot"},
+			{"default:diamond"},
+		}
+	})
+end
+
 minetest.register_craft({
-	output = 'diamonds:ingot 2',
+	output = "diamonds:steelsword",
 	recipe = {
-		{'default:diamond'},
-		{'default:steel_ingot'},
-		{'default:diamond'},
+		{"", "diamonds:ingot", ""},
+		{"", "diamonds:ingot", ""},
+		{"", "default:stick", ""},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:steelsword',
+	output = "diamonds:steelpick",
 	recipe = {
-		{'', 'diamonds:ingot', ''},
-		{'', 'diamonds:ingot', ''},
-		{'', 'default:stick', ''},
+		{"diamonds:ingot", "diamonds:ingot", "diamonds:ingot"},
+		{"", "default:stick", ""},
+		{"", "default:stick", ""},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:steelpick',
+	output = "diamonds:steelaxe",
 	recipe = {
-		{'diamonds:ingot', 'diamonds:ingot', 'diamonds:ingot'},
-		{'', 'default:stick', ''},
-		{'', 'default:stick', ''},
+		{"diamonds:ingot", "diamonds:ingot"},
+		{"diamonds:ingot", "default:stick"},
+		{"", "default:stick"},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:steelaxe',
+	output = "diamonds:steelshovel",
 	recipe = {
-		{'diamonds:ingot', 'diamonds:ingot'},
-		{'diamonds:ingot', 'default:stick'},
-		{'', 'default:stick'},
+		{"", "diamonds:ingot", ""},
+		{"", "default:stick", ""},
+		{"", "default:stick", ""},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:steelshovel',
+	output = "diamonds:steelblock",
 	recipe = {
-		{'', 'diamonds:ingot', ''},
-		{'', 'default:stick', ''},
-		{'', 'default:stick', ''},
+		{"diamonds:ingot", "diamonds:ingot", "diamonds:ingot"},
+		{"diamonds:ingot", "diamonds:ingot", "diamonds:ingot"},
+		{"diamonds:ingot", "diamonds:ingot", "diamonds:ingot"},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:steelblock',
+	output = "diamonds:garden_block",
 	recipe = {
-		{'diamonds:ingot', 'diamonds:ingot', 'diamonds:ingot'},
-		{'diamonds:ingot', 'diamonds:ingot', 'diamonds:ingot'},
-		{'diamonds:ingot', 'diamonds:ingot', 'diamonds:ingot'},
+		{"", "default:diamond", ""},
+		{"default:diamond", "default:diamondblock", "default:diamond"},
+		{"", "default:diamond", ""},
 	}
 })
 
 minetest.register_craft({
-	output = 'diamonds:garden_block',
+	output = "default:diamond 13",
 	recipe = {
-		{'', 'default:diamond', ''},
-		{'default:diamond', 'default:diamondblock', 'default:diamond'},
-		{'', 'default:diamond', ''},
+		{"diamonds:garden_block"},
 	}
 })
 
 minetest.register_craft({
-	output = 'default:diamond 13',
+	output = "diamonds:ingot 9",
 	recipe = {
-		{'diamonds:garden_block'},
-	}
-})
-
-minetest.register_craft({
-	output = 'diamonds:ingot 9',
-	recipe = {
-		{'', 'diamonds:steelblock', ''},
+		{"", "diamonds:steelblock", ""},
 	}
 })
 
