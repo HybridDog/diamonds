@@ -66,10 +66,37 @@ minetest.register_craftitem( "diamonds:ingot", {
 
 minetest.register_node( "diamonds:steelblock", {
 	description = "Diamond and Steel Block",
-	tile_images = { "diamond_steel_block.png" },
+	tiles = { "diamond_steel_block.png" },
 	groups = {cracky=3},
 	sounds = default.node_sound_stone_defaults(),
 })
+
+
+--
+--Stairs and slabs
+--
+
+local add_stair_and_slab
+if stairs.register_stair_and_slab then
+	function add_stair_and_slab(name)
+		local nd = "diamonds:"..name
+		if not string.find(name, "diamonds") then
+			name = "diamonds_"..name
+		end
+		local data = minetest.registered_nodes[nd]
+		stairs.register_stair_and_slab(name, nd,
+				data.groups,
+				data.tiles,
+				data.description.." Stair",
+				data.description.." Slab",
+				data.sounds
+		)
+	end
+else
+	add_stair_and_slab = function()end
+end
+
+add_stair_and_slab("steelblock")
 
 
 --
@@ -139,20 +166,20 @@ minetest.register_tool("diamonds:steelpick", {
 
 minetest.register_node( "diamonds:garden_block", {
 	description = "Diamond Showcase",
-	tile_images = { "diamond_showcase_block.png" },
+	tiles = { "diamond_showcase_block.png" },
 	is_ground_content = true,
 	groups = {cracky=3},
 	sounds = default.node_sound_stone_defaults(),
 	on_construct = function(pos)
-		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		if minetest.env:get_node(p).name == "air" then
-			minetest.add_node(p, {name="diamonds:garden"})
+		pos.y = pos.y+1
+		if minetest.get_node(pos).name == "air" then
+			minetest.add_node(pos, {name="diamonds:garden"})
 		end
 	end,
 	after_destruct = function(pos)
-		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		if minetest.env:get_node(p).name == "diamonds:garden" then
-			minetest.remove_node(p)
+		pos.y = pos.y+1
+		if minetest.get_node(pos).name == "diamonds:garden" then
+			minetest.remove_node(pos)
 		end
 	end
 })
@@ -163,6 +190,9 @@ minetest.register_node( "diamonds:garden", {
 	tiles = {"diamond_showcase.png^diamonds_diamond.png"},
 	paramtype = "light",
 	drop = "",
+	can_dig = function()
+		return false
+	end,
 	pointable = false,
 	groups = {immortal=1,not_in_creative_inventory=1},
 })
@@ -173,7 +203,7 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos)
 		local p = {x=pos.x, y=pos.y-1, z=pos.z}
-		if minetest.env:get_node(p).name ~= "diamonds:garden_block" then
+		if minetest.get_node(p).name ~= "diamonds:garden_block" then
 			minetest.remove_node(pos)
 		end
 	end
