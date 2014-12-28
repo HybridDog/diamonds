@@ -307,4 +307,4 @@ minetest.register_craft({
 --generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, ore_per_chunk, height_min, height_max)
 --generate_ore("ddiamond_in_ground", "default:stone", minp, maxp, seed+20,   1/13/13/13,    2, -31000,  -300)
 
-print(string.format("[diamonds] loaded after ca. %.2fs", os.clock() - t1))
+minetest.log("info", string.format("[diamonds] loaded after ca. %.2fs", os.clock() - t1))
