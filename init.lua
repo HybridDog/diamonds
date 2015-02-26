@@ -15,7 +15,7 @@ local diamond_alias_list = {
 	{"sword", "sword_diamond"},
 }
 
-for _,i in ipairs(diamond_alias_list) do
+for _,i in pairs(diamond_alias_list) do
 	minetest.register_alias("diamonds:"..i[1], "default:"..i[2])
 end
 
@@ -25,17 +25,13 @@ end
 --
 
 local function change_textures(node, imgs, typ)
-	local tmp = minetest.registered_items[node]
+	local tmp = {}
 	if typ == 0 then
 		tmp.tiles = imgs
-		minetest.register_node(":"..node, tmp)
-	elseif typ == 1 then
-		tmp.inventory_image = imgs[1]
-		minetest.register_item(":"..node, tmp)
 	else
 		tmp.inventory_image = imgs[1]
-		minetest.register_tool(":"..node, tmp)
 	end
+	minetest.override_item(node, tmp)
 end
 
 local diamond_list = {
@@ -48,7 +44,7 @@ local diamond_list = {
 	{"sword_diamond", {"diamond_sword.png"}, 2},
 }
 
-for _,i in ipairs(diamond_list) do
+for _,i in pairs(diamond_list) do
 	change_textures("default:"..i[1], i[2], i[3])
 end
 
