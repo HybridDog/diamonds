@@ -209,10 +209,6 @@ minetest.register_abm({
 	end
 })
 
-if mesecon
-and mesecon.register_mvps_stopper then
-	mesecon.register_mvps_stopper("diamonds:garden")
-end
 
 --
 --Crafting
