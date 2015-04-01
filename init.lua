@@ -34,7 +34,7 @@ local function change_textures(node, imgs, typ)
 	minetest.override_item(node, tmp)
 end
 
-local diamond_list = {
+for _,i in pairs({
 	{"stone_with_diamond", {"default_stone.png^diamond_in_ground.png"}, 0},
 	{"diamondblock", {"diamond_block.png"}, 0},
 	{"diamond", {"diamonds_diamond.png"}, 1},
@@ -42,9 +42,7 @@ local diamond_list = {
 	{"axe_diamond", {"diamond_axe.png"}, 2},
 	{"shovel_diamond", {"diamond_shovel.png"}, 2},
 	{"sword_diamond", {"diamond_sword.png"}, 2},
-}
-
-for _,i in pairs(diamond_list) do
+}) do
 	change_textures("default:"..i[1], i[2], i[3])
 end
 
