@@ -178,15 +178,13 @@ minetest.register_node( "diamonds:garden_block", {
 	end
 })
 
-minetest.register_node( "diamonds:garden", {
+minetest.register_node("diamonds:garden", {
 	drawtype = "plantlike",
 	description = "Diamond Showcase",
 	tiles = {"diamond_showcase.png^diamonds_diamond.png"},
 	paramtype = "light",
 	drop = "",
-	can_dig = function()
-		return false
-	end,
+	diggable = false,
 	pointable = false,
 	groups = {immortal=1,not_in_creative_inventory=1},
 })
