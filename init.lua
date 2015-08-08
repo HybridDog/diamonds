@@ -97,6 +97,90 @@ add_stair_and_slab("steelblock")
 --Diamond and Steel Tools
 --
 
+local tool_multipliers = {
+	sword = {
+		full_punch_interval = 6/7,
+		groupcaps={
+			snappy={times={[2]=7/9, [3]=0.5}, uses=65/4},
+		}
+	}
+}
+
+local tool_additions = {
+	sword = {
+		groupcaps={
+			choppy={times={[3]=0.7}, uses=500, maxlevel=0}
+		}
+	}
+}
+
+local function modify_tabs(a,b,func)
+	for i in pairs(b) do
+		local b = b[i]
+
+		if type(b) == "table" then
+			local a = a[i]
+			for i in pairs(b) do
+				local b = b[i]
+
+				if type(b) == "table" then
+					local a = a[i]
+					for i in pairs(b) do
+						local b = b[i]
+
+						if type(b) == "table" then
+							local a = a[i]
+							for i in pairs(b) do
+								local b = b[i]
+
+								if type(b) == "table" then
+									local a = a[i]
+									for i in pairs(b) do
+										local b = b[i]
+
+										if type(b) == "table" then
+											local a = a[i]
+											for i in pairs(b) do
+												local b = b[i]
+
+												func(a,b,i)
+											end
+										else
+											func(a,b,i)
+										end
+									end
+								else
+									func(a,b,i)
+								end
+							end
+						else
+							func(a,b,i)
+						end
+					end
+				else
+					func(a,b,i)
+				end
+			end
+		else
+			func(a,b,i)
+		end
+	end
+end
+
+local function multiply_caps(a,b)
+	modify_tabs(a,b,function(a,b,i)
+		a[i] = a[i]*b
+	end)
+end
+
+
+local function get_capabilities(typ, default)
+	local caps = table.copy(minetest.registered_tools[default].tool_capabilities)
+	multiply_caps(caps, tool_multipliers[typ])
+	--tool_multipliers
+end
+
+
 minetest.register_tool("diamonds:steelsword", {
 	description = "Diamond and Steel Sword",
 	inventory_image = "diamond_steel_sword.png",
@@ -156,7 +240,7 @@ minetest.register_tool("diamonds:steelpick", {
 --
 --This is still registered as diamonds:garden. I will change it and probably add an abm to replace
 --all old blocks soon?
--- 
+--
 
 minetest.register_node( "diamonds:garden_block", {
 	description = "Diamond Showcase",
