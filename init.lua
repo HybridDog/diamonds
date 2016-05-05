@@ -290,7 +290,7 @@ minetest.register_abm({
 --Crafting
 --
 
-if technic
+if minetest.global_exists(technic)
 and technic.register_alloy_recipe then
 	technic.register_alloy_recipe({
 		input = {"default:diamond 2", "default:steel_ingot"},
